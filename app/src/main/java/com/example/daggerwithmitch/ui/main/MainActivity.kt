@@ -1,41 +1,30 @@
 package com.example.daggerwithmitch.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import com.example.daggerwithmitch.BaseActivity
 import com.example.daggerwithmitch.R
-import com.example.daggerwithmitch.network.auth.AuthApi
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fetchUserInformation(1)
+
+
     }
 
-    private fun fetchUserInformation(userId: Int) {
-        val retrofit = Retrofit
-            .Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create()).build()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
 
-        val api = retrofit.create(AuthApi::class.java)
-        val disposable = api.getUser(userId)
-            .toObservable()
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                {
-                    Log.d("TESTING", "USER:$it")
-                }, {
-                    Log.d("TESTING", "ERROR:$it")
-                }
-            )
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.logout) {
+            sessionManager.logout()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

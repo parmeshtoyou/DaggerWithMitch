@@ -1,5 +1,6 @@
 package com.example.daggerwithmitch.ui.auth
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.RequestManager
 import com.example.daggerwithmitch.R
-import com.example.daggerwithmitch.models.User
+import com.example.daggerwithmitch.ui.main.MainActivity
 import com.example.daggerwithmitch.viewmodel.ViewModelProviderFactory
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.auth_activity.*
@@ -46,20 +47,20 @@ class AuthActivity : DaggerAppCompatActivity() {
     private fun subscribeObserver() {
         authViewModel.observeUser().observe(this, Observer {
             it?.let {
-                when (it.authStatus) {
-                    AuthStatus.LOADING -> {
+                when (it) {
+                    is AuthState.Loading -> {
                         showProgressBar(true)
                     }
-                    AuthStatus.AUTHENTICATED -> {
+                    is AuthState.Login -> {
                         showProgressBar(false)
                         Log.d("TESTING", "USER:${it.data}")
-                        gotoMainScreen(it.data)
+                        loginUser()
                     }
-                    AuthStatus.ERROR -> {
+                    is AuthState.Error -> {
                         showProgressBar(false)
                         Log.d("TESTING", "Invalid User")
                     }
-                    AuthStatus.NOT_AUTHENTICATED -> {
+                    is AuthState.Logout -> {
                         showProgressBar(false)
                     }
                 }
@@ -71,8 +72,9 @@ class AuthActivity : DaggerAppCompatActivity() {
         progress_bar.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    private fun gotoMainScreen(data: User?) {
-
+    private fun loginUser() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     private fun setLogo() {
