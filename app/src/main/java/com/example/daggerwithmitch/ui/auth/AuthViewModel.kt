@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.daggerwithmitch.SessionManager
-import com.example.daggerwithmitch.models.User
+import com.example.daggerwithmitch.models.user.User
 import com.example.daggerwithmitch.network.auth.AuthApi
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers

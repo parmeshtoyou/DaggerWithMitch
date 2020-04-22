@@ -1,4 +1,7 @@
-package com.example.daggerwithmitch.models
+package com.example.daggerwithmitch.models.user
+
+import com.example.daggerwithmitch.models.user.Address
+import com.example.daggerwithmitch.models.user.Company
 
 data class User(
     val address: Address? = null,

@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
-import com.example.daggerwithmitch.models.User
 import com.example.daggerwithmitch.ui.auth.AuthActivity
 import com.example.daggerwithmitch.ui.auth.AuthState
-import com.example.daggerwithmitch.ui.main.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -29,10 +27,10 @@ abstract class BaseActivity: DaggerAppCompatActivity() {
 
                     }
                     is AuthState.Login -> {
-                        Log.d("TESTING", "USER:${it.data}")
+                        Log.d("TESTING", "Base Activity USER:${it.data}")
                     }
                     is AuthState.Error -> {
-                        Log.d("TESTING", "Invalid User")
+                        Log.d("TESTING", "Invalid User message:${it.message}")
                     }
                     is AuthState.Logout -> {
                         gotoAuthPage()

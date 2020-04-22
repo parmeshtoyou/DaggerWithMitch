@@ -53,12 +53,12 @@ class AuthActivity : DaggerAppCompatActivity() {
                     }
                     is AuthState.Login -> {
                         showProgressBar(false)
-                        Log.d("TESTING", "USER:${it.data}")
+                        Log.d("TESTING", "Auth Activity USER:${it.data}")
                         loginUser()
                     }
                     is AuthState.Error -> {
                         showProgressBar(false)
-                        Log.d("TESTING", "Invalid User")
+                        Log.d("TESTING", "error:${it.message}")
                     }
                     is AuthState.Logout -> {
                         showProgressBar(false)

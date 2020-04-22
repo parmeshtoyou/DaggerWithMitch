@@ -2,7 +2,7 @@ package com.example.daggerwithmitch
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.example.daggerwithmitch.models.User
+import com.example.daggerwithmitch.models.user.User
 import com.example.daggerwithmitch.ui.auth.AuthState
 import javax.inject.Inject
 import javax.inject.Singleton

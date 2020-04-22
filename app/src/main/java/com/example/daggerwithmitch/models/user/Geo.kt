@@ -1,4 +1,4 @@
-package com.example.daggerwithmitch.models
+package com.example.daggerwithmitch.models.user
 
 data class Geo(
     val lat: String,
