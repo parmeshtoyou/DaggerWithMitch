@@ -17,25 +17,26 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun authenticateWithId(id: Int) {
-        Log.d("TESTING", "Authenticating with id")
+        Log.d("TESTING", "Authenticating with id:$id")
         sessionManager.authenticateWithId(getUserById(id))
     }
 
     private fun getUserById(userId: Int): LiveData<AuthState<User>> {
         val subscriber = authApi.getUser(userId)
             .onErrorReturn { User(id = -1) }
-            .map(object : Function<User, AuthState<User>> {
-                override fun apply(t: User): AuthState<User> {
-                    return if (t.id == -1) {
-                        AuthState.Error(message = "Couldn't Authenticate User")
-                    } else {
-                        AuthState.Login(data = t)
-                    }
-                }
-            })
+            .map(authMapFunction)
             .subscribeOn(Schedulers.io())
         return LiveDataReactiveStreams.fromPublisher(subscriber)
     }
+
+    private val authMapFunction =
+        Function<User, AuthState<User>> { t ->
+            if (t.id == -1) {
+                AuthState.Error(message = "Couldn't Authenticate User")
+            } else {
+                AuthState.Login(data = t)
+            }
+        }
 
     fun observeUser(): LiveData<AuthState<User>> {
         return sessionManager.getAuthUser()

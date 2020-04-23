@@ -6,13 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.daggerwithmitch.R
-import com.example.daggerwithmitch.models.post.Posts
-import com.example.daggerwithmitch.models.post.PostsItem
+import com.example.daggerwithmitch.models.post.Post
 
 
 class PostsAdapter: RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
 
-    private var posts: List<PostsItem> = ArrayList()
+    private var posts: List<Post> = ArrayList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -26,14 +25,14 @@ class PostsAdapter: RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
         return posts.size
     }
 
-    fun setPosts(posts: Posts) {
+    fun setPosts(posts: List<Post>) {
         this.posts = posts
         notifyDataSetChanged()
     }
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.title)
-        fun bind(post: PostsItem) {
+        fun bind(post: Post) {
             title.text = post.title
         }
     }
