@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.daggerwithmitch.R
 import com.example.daggerwithmitch.viewmodel.ViewModelProviderFactory
 import dagger.android.support.DaggerFragment
@@ -28,12 +28,16 @@ class PostsFragment: DaggerFragment() {
 
     private lateinit var postViewModel: PostViewModel
 
+    private lateinit var progressBar : ProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.posts_fragment, container, false)
+        val view = inflater.inflate(R.layout.posts_fragment, container, false)
+        progressBar = view.findViewById(R.id.progress_bar)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,12 +56,19 @@ class PostsFragment: DaggerFragment() {
         postViewModel.observePosts().observe(viewLifecycleOwner, Observer {
             when(it) {
                 is Resource.Success -> {
+                    showProgress()
                    postsAdapter.setPosts(it.data!!)
                 }
                 is Resource.Failed -> {
+                    showProgress()
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
+                is Resource.Loading -> showProgress(true)
             }
         })
+    }
+
+    private fun showProgress(visibility: Boolean = false) {
+        progressBar.visibility = if (visibility) View.VISIBLE else View.GONE
     }
 }
