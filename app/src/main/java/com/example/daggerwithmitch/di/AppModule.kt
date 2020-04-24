@@ -5,10 +5,8 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.Request
 import com.bumptech.glide.request.RequestOptions
 import com.example.daggerwithmitch.R
-import com.example.daggerwithmitch.network.auth.AuthApi
 import com.example.daggerwithmitch.util.Constants
 import dagger.Module
 import dagger.Provides

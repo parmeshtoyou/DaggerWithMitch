@@ -1,6 +1,5 @@
 package com.example.daggerwithmitch.network.main
 
-import com.bumptech.glide.load.engine.Resource
 import com.example.daggerwithmitch.models.post.Post
 import io.reactivex.Flowable
 import retrofit2.http.GET

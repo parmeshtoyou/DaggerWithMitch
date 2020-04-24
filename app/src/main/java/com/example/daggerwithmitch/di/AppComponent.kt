@@ -3,7 +3,6 @@ package com.example.daggerwithmitch.di
 import android.app.Application
 import com.example.daggerwithmitch.BaseApplication
 import com.example.daggerwithmitch.SessionManager
-import com.example.daggerwithmitch.ui.auth.AuthViewModel
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
