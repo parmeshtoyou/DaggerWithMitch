@@ -11,15 +11,18 @@ import retrofit2.Retrofit
 @Module
 class MainModule {
 
+    @MainScope
     @Provides
     fun provideMainApi(retrofit: Retrofit): MainApi {
         return retrofit.create(MainApi::class.java)
     }
 
+    @MainScope
     @Provides
     fun provideLinearLayoutManager(application: Application) =
         LinearLayoutManager(application.applicationContext)
 
+    @MainScope
     @Provides
     fun providePostAdapter() = PostsAdapter()
 }
