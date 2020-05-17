@@ -23,7 +23,7 @@ class PostViewModel @Inject constructor(
 
     private lateinit var posts: MediatorLiveData<Resource<List<Post>>>
 
-    fun observePosts(): LiveData<Resource<List<Post>>> {
+    /*fun observePosts(): LiveData<Resource<List<Post>>> {
         if (this::posts.isInitialized.not()) {
             posts = MediatorLiveData()
             posts.value = Resource.Loading()
@@ -47,5 +47,5 @@ class PostViewModel @Inject constructor(
             }
         }
         return posts
-    }
+    }*/
 }

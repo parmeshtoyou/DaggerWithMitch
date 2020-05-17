@@ -1,27 +1,14 @@
 package com.example.daggerwithmitch.ui.main.posts
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.daggerwithmitch.R
-import com.example.daggerwithmitch.viewmodel.ViewModelProviderFactory
-import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.posts_fragment.*
-import javax.inject.Inject
+import androidx.fragment.app.Fragment
 
-class PostsFragment: DaggerFragment() {
+class PostsFragment: Fragment() {
 
-    @Inject
+    /*@Inject
     lateinit var postsAdapter: PostsAdapter
 
     @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
+    lateinit var authViewModelFactory: AuthViewModelFactory
 
     @Inject
     lateinit var linearLayoutManager: LinearLayoutManager
@@ -42,11 +29,11 @@ class PostsFragment: DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler_view.apply {
+        *//*recycler_view.apply {
             layoutManager = linearLayoutManager
             adapter = postsAdapter
-        }
-        postViewModel = ViewModelProvider(this, viewModelProviderFactory)[PostViewModel::class.java]
+        }*//*
+        postViewModel = ViewModelProvider(this, authViewModelFactory)[PostViewModel::class.java]
 
         observePosts()
     }
@@ -70,5 +57,5 @@ class PostsFragment: DaggerFragment() {
 
     private fun showProgress(visibility: Boolean = false) {
         progressBar.visibility = if (visibility) View.VISIBLE else View.GONE
-    }
+    }*/
 }

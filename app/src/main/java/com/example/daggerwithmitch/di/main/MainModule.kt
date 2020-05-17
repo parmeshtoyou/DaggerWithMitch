@@ -9,19 +9,22 @@ import dagger.Provides
 import retrofit2.Retrofit
 
 @Module
-class MainModule {
+object MainModule {
 
+    @JvmStatic
     @MainScope
     @Provides
     fun provideMainApi(retrofit: Retrofit): MainApi {
         return retrofit.create(MainApi::class.java)
     }
 
+    @JvmStatic
     @MainScope
     @Provides
     fun provideLinearLayoutManager(application: Application) =
         LinearLayoutManager(application.applicationContext)
 
+    @JvmStatic
     @MainScope
     @Provides
     fun providePostAdapter() = PostsAdapter()

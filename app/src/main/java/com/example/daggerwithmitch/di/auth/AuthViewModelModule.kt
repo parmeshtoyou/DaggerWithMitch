@@ -1,8 +1,10 @@
 package com.example.daggerwithmitch.di.auth
 
 import androidx.lifecycle.ViewModel
-import com.example.daggerwithmitch.di.ViewModelKey
+import androidx.lifecycle.ViewModelProvider
+import com.example.daggerwithmitch.di.auth.keys.AuthViewModelKey
 import com.example.daggerwithmitch.ui.auth.AuthViewModel
+import com.example.daggerwithmitch.viewmodel.AuthViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -12,7 +14,11 @@ abstract class AuthViewModelModule {
 
     @AuthScope
     @Binds
+    abstract fun bindViewModelFactory(factory: AuthViewModelFactory): ViewModelProvider.Factory
+
+    @AuthScope
+    @Binds
     @IntoMap
-    @ViewModelKey(AuthViewModel::class)
-    abstract fun bindAuthViewModel(authViewModel: AuthViewModel) : ViewModel
+    @AuthViewModelKey(AuthViewModel::class)
+    abstract fun bindAuthViewModel(authViewModel: AuthViewModel): ViewModel
 }

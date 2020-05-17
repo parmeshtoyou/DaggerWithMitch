@@ -1,44 +1,103 @@
 package com.example.daggerwithmitch.ui.auth
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
-import androidx.lifecycle.ViewModel
-import com.example.daggerwithmitch.SessionManager
-import com.example.daggerwithmitch.models.user.User
-import com.example.daggerwithmitch.network.auth.AuthApi
-import io.reactivex.functions.Function
-import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.liveData
+import com.example.daggerwithmitch.models.AuthToken
+import com.example.daggerwithmitch.repository.auth.AuthRepository
+import com.example.daggerwithmitch.BaseViewModel
+import com.example.daggerwithmitch.ui.DataState
+import com.example.daggerwithmitch.ui.Loading
+import com.example.daggerwithmitch.ui.auth.state.AuthStateEvent
+import com.example.daggerwithmitch.ui.auth.state.AuthViewState
+import com.example.daggerwithmitch.ui.auth.state.LoginFields
+import com.example.daggerwithmitch.ui.auth.state.RegistrationFields
 import javax.inject.Inject
 
 class AuthViewModel @Inject constructor(
-    private val authApi: AuthApi,
-    private val sessionManager: SessionManager
-) : ViewModel() {
+    val authRepository: AuthRepository
+) : BaseViewModel<AuthStateEvent, AuthViewState>()
+{
 
-    fun authenticateWithId(id: Int) {
-        Log.d("TESTING", "Authenticating with id:$id")
-        sessionManager.authenticateWithId(getUserById(id))
-    }
+    override fun handleStateEvent(stateEvent: AuthStateEvent): LiveData<DataState<AuthViewState>> {
+        when(stateEvent){
 
-    private fun getUserById(userId: Int): LiveData<AuthState<User>> {
-        val subscriber = authApi.getUser(userId)
-            .onErrorReturn { User(id = -1) }
-            .map(authMapFunction)
-            .subscribeOn(Schedulers.io())
-        return LiveDataReactiveStreams.fromPublisher(subscriber)
-    }
+            is AuthStateEvent.LoginAttemptEvent -> {
+                return authRepository.attemptLogin(
+                    stateEvent.email,
+                    stateEvent.password
+                )
+            }
 
-    private val authMapFunction =
-        Function<User, AuthState<User>> { t ->
-            if (t.id == -1) {
-                AuthState.Error(message = "Couldn't Authenticate User")
-            } else {
-                AuthState.Login(data = t)
+            is AuthStateEvent.RegisterAttemptEvent -> {
+                return authRepository.attemptRegistration(
+                    stateEvent.email,
+                    stateEvent.username,
+                    stateEvent.password,
+                    stateEvent.confirm_password
+                )
+            }
+
+            is AuthStateEvent.CheckPreviousAuthEvent -> {
+                return authRepository.checkPreviousAuthUser()
+            }
+
+
+            is AuthStateEvent.None ->{
+                return liveData {
+                    emit(
+                        DataState(
+                            null,
+                            Loading(false),
+                            null
+                        )
+                    )
+                }
             }
         }
+    }
 
-    fun observeUser(): LiveData<AuthState<User>> {
-        return sessionManager.getAuthUser()
+    override fun initNewViewState(): AuthViewState {
+        return AuthViewState()
+    }
+
+    fun setRegistrationFields(registrationFields: RegistrationFields){
+        val update = getCurrentViewStateOrNew()
+        if(update.registrationFields == registrationFields){
+            return
+        }
+        update.registrationFields = registrationFields
+        setViewState(update)
+    }
+
+    fun setLoginFields(loginFields: LoginFields){
+        val update = getCurrentViewStateOrNew()
+        if(update.loginFields == loginFields){
+            return
+        }
+        update.loginFields = loginFields
+        setViewState(update)
+    }
+
+    fun setAuthToken(authToken: AuthToken){
+        val update = getCurrentViewStateOrNew()
+        if(update.authToken == authToken){
+            return
+        }
+        update.authToken = authToken
+        setViewState(update)
+    }
+
+    fun cancelActiveJobs(){
+        handlePendingData()
+        authRepository.cancelActiveJobs()
+    }
+
+    fun handlePendingData(){
+        setStateEvent(AuthStateEvent.None())
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelActiveJobs()
     }
 }

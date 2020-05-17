@@ -1,20 +1,17 @@
 package com.example.daggerwithmitch.di
 
 import android.app.Application
-import com.example.daggerwithmitch.BaseApplication
+import com.example.daggerwithmitch.BaseActivity
 import com.example.daggerwithmitch.SessionManager
+import com.example.daggerwithmitch.di.auth.AuthComponent
+import com.example.daggerwithmitch.di.main.MainComponent
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjector
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(
-    modules = [AndroidSupportInjectionModule::class, AppModule::class,
-        ActivityBuilderModule::class, ViewModelFactoryModule::class]
-)
-interface AppComponent : AndroidInjector<BaseApplication> {
+@Component(modules = [AppModule::class, SubComponentModule::class])
+interface AppComponent {
 
     fun getSession(): SessionManager
 
@@ -24,4 +21,10 @@ interface AppComponent : AndroidInjector<BaseApplication> {
         fun application(application: Application): Builder
         fun build(): AppComponent
     }
+
+    fun attach(baseActivity: BaseActivity)
+
+    fun authComponent() : AuthComponent.Factory
+
+    fun mainComponent() : MainComponent.Factory
 }
